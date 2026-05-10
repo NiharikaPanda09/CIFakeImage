@@ -1,2 +1,5 @@
 # Ignore GitHub-large files
 model/X.txt.npy
+
+# Environment variables
+.env

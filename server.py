@@ -28,6 +28,9 @@ except ImportError:
 import fitz  # PyMuPDF
 from docx import Document
 import uuid
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'super-secret-key-cifake')
@@ -42,7 +45,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # MongoDB Configuration
-MONGO_URI = "mongodb+srv://niharikapanda278_db_user:cifake123@cluster0.wzftxxp.mongodb.net/?appName=Cluster0"
+MONGO_URI = os.getenv('MONGO_URI')
 client = MongoClient(MONGO_URI)
 db = client['cifake_db']
 history_collection = db['prediction_history']
