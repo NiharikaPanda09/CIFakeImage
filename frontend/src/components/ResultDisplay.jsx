@@ -6,37 +6,36 @@ import {
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 
-// ── Color tokens (light theme) ────────────────────────────────────────────────
-const C = {
-  textPrimary: '#111827',
-  textSec:     '#6B7280',
-  border:      '#E5E7EB',
-  bg:          '#F8FAFC',
-  card:        '#FFFFFF',
-  accent:      '#4F46E5',
-  accentBg:    '#EEF2FF',
-  success:     '#10B981',
-  successBg:   '#ECFDF5',
-  warning:     '#F59E0B',
-  warningBg:   '#FFFBEB',
-  danger:      '#EF4444',
-  dangerBg:    '#FEF2F2',
-};
+const getColors = (theme) => ({
+  textPrimary: theme === 'dark' ? '#F1F5F9' : '#0F172A',
+  textSec:     theme === 'dark' ? '#94A3B8' : '#64748B',
+  border:      theme === 'dark' ? '#1E293B' : '#E2E8F0',
+  bg:          theme === 'dark' ? '#0B0F1A' : '#F8FAFC',
+  card:        theme === 'dark' ? '#161E2E' : '#FFFFFF',
+  accent:      theme === 'dark' ? '#6366F1' : '#4F46E5',
+  accentBg:    theme === 'dark' ? '#1E1B4B' : '#F5F3FF',
+  success:     theme === 'dark' ? '#10B981' : '#059669',
+  successBg:   theme === 'dark' ? '#064E3B' : '#F0FDF4',
+  warning:     theme === 'dark' ? '#F59E0B' : '#D97706',
+  warningBg:   theme === 'dark' ? '#451A03' : '#FFFBEB',
+  danger:      theme === 'dark' ? '#F43F5E' : '#E11D48',
+  dangerBg:    theme === 'dark' ? '#4C0519' : '#FFF1F2',
+});
 
 // ── Reliability badge ─────────────────────────────────────────────────────────
 const ReliabilityBadge = ({ reliability }) => {
   const map = {
-    'High Confidence & Consistent': { icon: <CheckCircle size={14}/>, color: C.success, bg: C.successBg, border: '#A7F3D0' },
-    'Moderate Confidence':          { icon: <AlertCircle size={14}/>, color: C.warning, bg: C.warningBg, border: '#FDE68A' },
-    'Low Confidence — Needs Review':{ icon: <AlertTriangle size={14}/>,color: C.danger,  bg: C.dangerBg,  border: '#FECACA' },
+    'High Confidence & Consistent': { icon: <ShieldCheck size={13}/>, color: '#059669', bg: '#F0FDF4', border: '#DCFCE7' },
+    'Moderate Confidence':          { icon: <AlertCircle size={13}/>, color: '#D97706', bg: '#FFFBEB', border: '#FEF3C7' },
+    'Low Confidence — Needs Review':{ icon: <AlertTriangle size={13}/>,color: '#E11D48', bg: '#FFF1F2', border: '#FECDD3' },
   };
   const s = map[reliability] || map['Moderate Confidence'];
   return (
     <div style={{
-      display:'inline-flex', alignItems:'center', gap:6, padding:'6px 14px',
-      borderRadius:99, background: s.bg, border:`1px solid ${s.border}`, color: s.color,
-      fontSize:12, fontWeight:700
+      display:'inline-flex', alignItems:'center', gap:6, color: s.color,
+      fontSize:11, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.5px'
     }}>
       {s.icon} {reliability}
     </div>
@@ -44,43 +43,43 @@ const ReliabilityBadge = ({ reliability }) => {
 };
 
 // ── Section wrapper ───────────────────────────────────────────────────────────
-const Section = ({ title, icon, children, noBorder }) => (
+const Section = ({ title, icon, children, noBorder, C }) => (
   <div style={{
     background: C.card, borderRadius:16,
     border: noBorder ? 'none' : `1px solid ${C.border}`,
-    boxShadow: '0 1px 6px rgba(0,0,0,0.05)',
-    overflow:'hidden', marginBottom:20
+    boxShadow: '0 4px 20px -5px rgba(0,0,0,0.05)',
+    overflow:'hidden', marginBottom:24
   }}>
     <div style={{
-      display:'flex', alignItems:'center', gap:10, padding:'14px 22px',
-      borderBottom:`1px solid ${C.border}`, background:'#FAFAFA'
+      display:'flex', alignItems:'center', gap:10, padding:'16px 24px',
+      borderBottom:`1px solid ${C.border}`, background: C.bg
     }}>
       <span style={{ color: C.accent }}>{icon}</span>
-      <span style={{ fontSize:13, fontWeight:700, color: C.textPrimary, textTransform:'uppercase', letterSpacing:1 }}>{title}</span>
+      <span style={{ fontSize:12, fontWeight:800, color: C.textPrimary, textTransform:'uppercase', letterSpacing:1.5 }}>{title}</span>
     </div>
-    <div style={{ padding:'20px 22px' }}>{children}</div>
+    <div style={{ padding:'24px' }}>{children}</div>
   </div>
 );
 
 // ── Collapsible section ───────────────────────────────────────────────────────
-const CollapsibleSection = ({ title, icon, children, defaultOpen = true }) => {
+const CollapsibleSection = ({ title, icon, children, C, defaultOpen = true }) => {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <div style={{
       background: C.card, borderRadius:16, border:`1px solid ${C.border}`,
-      boxShadow:'0 1px 6px rgba(0,0,0,0.05)', overflow:'hidden', marginBottom:20
+      boxShadow:'0 4px 20px -5px rgba(0,0,0,0.05)', overflow:'hidden', marginBottom:24
     }}>
       <button
         onClick={() => setOpen(v => !v)}
         style={{
           width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between',
-          padding:'14px 22px', background:'#FAFAFA', border:'none', cursor:'pointer',
+          padding:'16px 24px', background: C.bg, border:'none', cursor:'pointer',
           borderBottom: open ? `1px solid ${C.border}` : 'none'
         }}
       >
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
           <span style={{ color: C.accent }}>{icon}</span>
-          <span style={{ fontSize:13, fontWeight:700, color: C.textPrimary, textTransform:'uppercase', letterSpacing:1 }}>{title}</span>
+          <span style={{ fontSize:12, fontWeight:800, color: C.textPrimary, textTransform:'uppercase', letterSpacing:1.5 }}>{title}</span>
         </div>
         {open ? <ChevronUp size={16} style={{ color: C.textSec }}/> : <ChevronDown size={16} style={{ color: C.textSec }}/>}
       </button>
@@ -94,7 +93,7 @@ const CollapsibleSection = ({ title, icon, children, defaultOpen = true }) => {
             transition={{ duration:.25 }}
             style={{ overflow:'hidden' }}
           >
-            <div style={{ padding:'20px 22px' }}>{children}</div>
+            <div style={{ padding:'24px' }}>{children}</div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -226,6 +225,8 @@ const generatePDF = (resultData) => {
 
 // ── Main Component ────────────────────────────────────────────────────────────
 const ResultDisplay = ({ resultData }) => {
+  const { theme } = useTheme();
+  const C = getColors(theme);
   const [sliderPos, setSliderPos] = useState(50);
   const [showFaceGrad, setShowFaceGrad] = useState(false);
   const navigate = useNavigate();
@@ -257,56 +258,66 @@ const ResultDisplay = ({ resultData }) => {
 
       {/* ── 1. Verdict Card ──────────────────────────────── */}
       <div style={{
-        borderRadius:20, border:`1.5px solid ${predBorder}`, background: C.card,
-        boxShadow:'0 2px 16px rgba(0,0,0,0.07)', overflow:'hidden', marginBottom:20
+        borderRadius:24, background: C.card, border:`1px solid ${C.border}`,
+        boxShadow:'0 10px 40px -10px rgba(0,0,0,0.08)', overflow:'hidden', marginBottom:28
       }}>
-        <div style={{ padding:'20px 24px', background: predBg, borderBottom:`1px solid ${predBorder}` }}>
-          <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
-            <div>
-              {/* Use Case badge */}
+        {/* Top accent bar */}
+        <div style={{ height:6, background: isFake ? `linear-gradient(90deg, ${C.danger}, #FB7185)` : `linear-gradient(90deg, ${C.success}, #34D399)` }} />
+        
+        <div style={{ padding:'32px' }}>
+          <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', flexWrap:'wrap', gap:24 }}>
+            <div style={{ flex:1, minWidth:300 }}>
+              {/* Category indicator */}
               <div style={{
-                display:'inline-flex', alignItems:'center', gap:6, padding:'3px 12px',
-                borderRadius:99, background: C.accentBg, border:`1px solid #C7D2FE`,
-                color: C.accent, fontSize:11, fontWeight:700, marginBottom:10
+                display:'inline-flex', alignItems:'center', gap:8,
+                color: C.accent, fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:1.5, marginBottom:16
               }}>
-                {useCaseLabel}
+                <Brain size={12}/> {useCaseLabel}
               </div>
-              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:6 }}>
-                {isFake
-                  ? <AlertTriangle size={28} style={{ color: C.danger }}/>
-                  : <ShieldCheck   size={28} style={{ color: C.success }}/>
-                }
-                <h2 style={{ margin:0, fontSize:28, fontWeight:900, color: predColor, lineHeight:1 }}>
-                  {resultData.prediction}
-                </h2>
+              
+              <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:12 }}>
+                <div>
+                  <h2 style={{ margin:0, fontSize:36, fontWeight:950, color: C.textPrimary, lineHeight:1, letterSpacing:'-1.5px', display:'flex', alignItems:'center', gap:12 }}>
+                    {isFake ? <AlertTriangle size={24} style={{ color: C.danger }}/> : <ShieldCheck size={24} style={{ color: C.success }}/>}
+                    IMAGE IS <span style={{ color: predColor }}>{resultData.prediction}</span>
+                  </h2>
+                  <p style={{ margin:'4px 0 0', fontSize:14, color: C.textSec, fontWeight:500 }}>
+                    File: <span style={{ color: C.textPrimary, fontWeight:600 }}>{resultData.filename}</span>
+                  </p>
+                </div>
               </div>
-              <p style={{ margin:'0 0 8px', fontSize:13, color: C.textSec }}>{resultData.filename}</p>
+
               {contextNote && (
-                <p style={{ margin:0, fontSize:13, color: C.textPrimary, fontStyle:'italic', maxWidth:520 }}>
+                <div style={{ 
+                  marginTop:20, padding:'12px 16px', borderRadius:12, 
+                  background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                  borderLeft:`4px solid ${C.accent}`, color: C.textSec, fontSize:14, fontStyle:'italic', lineHeight:1.5
+                }}>
                   "{contextNote}"
-                </p>
+                </div>
               )}
             </div>
-            <div style={{ textAlign:'right' }}>
-              <p style={{ margin:'0 0 2px', fontSize:10, fontWeight:700, color: C.textSec, textTransform:'uppercase', letterSpacing:1 }}>Confidence</p>
-              <p style={{ margin:'0 0 8px', fontSize:38, fontWeight:900, color: C.textPrimary, lineHeight:1 }}>
-                {resultData.confidence?.toFixed(1)}<span style={{ fontSize:18, color: C.textSec }}>%</span>
+
+            <div style={{ 
+              textAlign:'right', minWidth:180
+            }}>
+              <p style={{ margin:'0 0 4px', fontSize:10, fontWeight:800, color: C.textSec, textTransform:'uppercase', letterSpacing:1.5 }}>Forensic Confidence</p>
+              <p style={{ margin:'0 0 16px', fontSize:48, fontWeight:950, color: C.textPrimary, lineHeight:1 }}>
+                {resultData.confidence?.toFixed(1)}<span style={{ fontSize:22, color: C.textSec, fontWeight:700 }}>%</span>
               </p>
-              <p style={{
-                margin:'0 0 8px', fontSize:12, fontWeight:700, padding:'3px 12px', borderRadius:99,
-                background: isFake ? C.dangerBg : C.successBg,
-                color: isFake ? C.danger : C.success,
-                border:`1px solid ${predBorder}`, display:'inline-block'
-              }}>{riskLevel}</p>
-              <br/>
-              <ReliabilityBadge reliability={reliability} />
+              <div style={{ display:'flex', flexDirection:'column', alignItems:'flex-end', gap:8 }}>
+                <span style={{
+                  fontSize:11, fontWeight:900, color: isFake ? C.danger : C.success, textTransform:'uppercase', letterSpacing:1
+                }}>{riskLevel.toUpperCase()}</span>
+                <ReliabilityBadge reliability={reliability} />
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* ── 2. Visual Analysis ───────────────────────────── */}
-      <Section title="Visual Analysis — Grad-CAM" icon={<Eye size={16}/>}>
+      <Section title="Visual Analysis — Grad-CAM" icon={<Eye size={16}/>} C={C}>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
           {/* Slider viewer */}
           <div>
@@ -350,7 +361,7 @@ const ResultDisplay = ({ resultData }) => {
       </Section>
 
       {/* ── 3. Explainability Panel ──────────────────────── */}
-      <CollapsibleSection title="Why This Decision Was Made" icon={<Brain size={16}/>}>
+      <CollapsibleSection title="Why This Decision Was Made" icon={<Brain size={16}/>} C={C}>
         <p style={{ fontSize:13, color: C.textSec, marginBottom:16 }}>
           The following factors contributed to the model's decision:
         </p>
@@ -384,7 +395,7 @@ const ResultDisplay = ({ resultData }) => {
       </CollapsibleSection>
 
       {/* ── 4. How It Works ─────────────────────────────── */}
-      <CollapsibleSection title="How This Works" icon={<Info size={16}/>} defaultOpen={false}>
+      <CollapsibleSection title="How This Works" icon={<Info size={16}/>} C={C} defaultOpen={false}>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:16 }}>
           {[
             { title:'CNN Model',   body:'A Convolutional Neural Network analyzes pixel patterns and feature maps to detect manipulation artifacts invisible to the human eye.' },
@@ -402,7 +413,7 @@ const ResultDisplay = ({ resultData }) => {
       </CollapsibleSection>
 
       {/* ── 5. Model Limitations ────────────────────────── */}
-      <CollapsibleSection title="Model Limitations" icon={<AlertCircle size={16}/>} defaultOpen={false}>
+      <CollapsibleSection title="Model Limitations" icon={<AlertCircle size={16}/>} C={C} defaultOpen={false}>
         <ul style={{ margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:10 }}>
           {[
             'Model trained on low-resolution images (32×32) — may miss subtle or high-quality AI edits.',

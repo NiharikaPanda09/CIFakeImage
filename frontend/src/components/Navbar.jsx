@@ -17,18 +17,18 @@ const Navbar = () => {
 
   const isActive = (path) => {
     return location.pathname === path 
-      ? "bg-blue-700 dark:bg-slate-700 text-white" 
-      : "text-blue-100 hover:bg-blue-600 dark:hover:bg-slate-700 hover:text-white";
+      ? "bg-blue-600 text-white shadow-md" 
+      : "text-slate-600 dark:text-blue-100 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-white/10";
   };
 
   return (
-    <nav className="bg-blue-800 dark:bg-slate-800 shadow-lg transition-colors duration-300">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/5 dark:bg-black/5 backdrop-blur-md border-b border-white/10 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <ShieldCheck className="h-8 w-8 text-blue-300" />
-              <span className="ml-2 text-white font-bold text-xl tracking-tight">CIFAKE Explainer</span>
+              <ShieldCheck className="h-8 w-8 text-blue-600 dark:text-blue-300" />
+              <span className="ml-2 text-slate-900 dark:text-white font-bold text-xl tracking-tight">CIFAKE Explainer</span>
             </Link>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
@@ -63,20 +63,20 @@ const Navbar = () => {
           <div className="flex items-center space-x-4">
             <button 
               onClick={toggleTheme} 
-              className="p-2 rounded-full text-blue-200 hover:text-white hover:bg-blue-700 dark:hover:bg-slate-700 transition-colors"
+              className="p-2 rounded-full text-slate-500 dark:text-blue-200 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-white/10 transition-colors"
               aria-label="Toggle dark mode"
             >
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
             {user ? (
               <>
-                <div className="flex items-center text-blue-100">
+                <div className="flex items-center text-slate-700 dark:text-blue-100">
                   <User className="h-5 w-5 mr-1" />
                   <span className="text-sm font-medium">{user.username}</span>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center text-blue-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-blue-600"
+                  className="flex items-center text-slate-600 dark:text-blue-100 hover:text-blue-600 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-blue-50 dark:hover:bg-white/10"
                 >
                   <LogOut className="h-4 w-4 mr-1" />
                   Logout
@@ -84,7 +84,7 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link to="/login" className="text-blue-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-blue-600">
+                <Link to="/login" className="text-slate-600 dark:text-blue-100 hover:text-blue-600 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-blue-50 dark:hover:bg-white/10">
                   Login
                 </Link>
                 <Link to="/register" className="bg-blue-600 text-white hover:bg-blue-500 px-4 py-2 rounded-md text-sm font-medium transition-colors">

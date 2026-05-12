@@ -11,6 +11,7 @@ import Compare from './pages/Compare';
 import Analytics from './pages/Analytics';
 import FaceAnalysis from './pages/FaceAnalysis';
 import BulkAnalysis from './pages/BulkAnalysis';
+import BackgroundEffects from './components/BackgroundEffects';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import axios from 'axios';
@@ -32,9 +33,10 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-50 flex flex-col transition-colors duration-300">
+          <div className="min-h-screen text-slate-900 dark:text-slate-50 flex flex-col transition-colors duration-300">
+            <BackgroundEffects />
             <Navbar />
-          <main className="flex-grow">
+            <main className="flex-grow relative z-10 pt-16">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />

@@ -9,29 +9,31 @@ import { useTheme } from '../context/ThemeContext';
 
 // ── Color tokens ─────────────────────────────────────────────────────────────
 const getColors = (theme) => ({
-  bg:         theme === 'dark' ? '#0F172A' : '#F8FAFC',
-  card:       theme === 'dark' ? '#1E293B' : '#FFFFFF',
-  border:     theme === 'dark' ? '#334155' : '#E5E7EB',
-  textPrimary:theme === 'dark' ? '#F8FAFC' : '#111827',
-  textSec:    theme === 'dark' ? '#94A3B8' : '#6B7280',
-  accent:     theme === 'dark' ? '#818CF8' : '#4F46E5',
-  accentBg:   theme === 'dark' ? '#312E81' : '#EEF2FF',
-  success:    theme === 'dark' ? '#34D399' : '#10B981',
-  successBg:  theme === 'dark' ? '#064E3B' : '#ECFDF5',
-  warning:    theme === 'dark' ? '#FBBF24' : '#F59E0B',
+  bg:         theme === 'dark' ? '#0B0F1A' : '#F8FAFC',
+  card:       theme === 'dark' ? '#161E2E' : '#FFFFFF',
+  border:     theme === 'dark' ? '#1E293B' : '#E2E8F0',
+  textPrimary:theme === 'dark' ? '#F1F5F9' : '#0F172A',
+  textSec:    theme === 'dark' ? '#94A3B8' : '#64748B',
+  accent:     theme === 'dark' ? '#6366F1' : '#4F46E5',
+  accentBg:   theme === 'dark' ? '#1E1B4B' : '#F5F3FF',
+  success:    theme === 'dark' ? '#10B981' : '#059669',
+  successBg:  theme === 'dark' ? '#064E3B' : '#F0FDF4',
+  warning:    theme === 'dark' ? '#F59E0B' : '#D97706',
   warningBg:  theme === 'dark' ? '#451A03' : '#FFFBEB',
-  danger:     theme === 'dark' ? '#F87171' : '#EF4444',
-  dangerBg:   theme === 'dark' ? '#450A0A' : '#FEF2F2',
+  danger:     theme === 'dark' ? '#F43F5E' : '#E11D48',
+  dangerBg:   theme === 'dark' ? '#4C0519' : '#FFF1F2',
 });
 
 // ── Risk helpers ──────────────────────────────────────────────────────────────
 const riskStyle = (risk, C) => {
-  if (risk === 'High')   return { color: C.danger,  bg: C.dangerBg,  border: C.theme === 'dark' ? '#991B1B' : '#FECACA' };
-  if (risk === 'Medium') return { color: C.warning, bg: C.warningBg, border: C.theme === 'dark' ? '#92400E' : '#FDE68A' };
-  return                        { color: C.success, bg: C.successBg, border: C.theme === 'dark' ? '#065F46' : '#A7F3D0' };
+  if (risk === 'High')   return { color: C.danger,  bg: C.dangerBg,  border: C.theme === 'dark' ? '#881337' : '#FECDD3' };
+  if (risk === 'Medium') return { color: C.warning, bg: C.warningBg, border: C.theme === 'dark' ? '#78350F' : '#FEF3C7' };
+  return                        { color: C.success, bg: C.successBg, border: C.theme === 'dark' ? '#064E3B' : '#DCFCE7' };
 };
 
-const barColor = (isSusp, C) => isSusp ? C.danger : C.success;
+const barColor = (isSusp, C) => isSusp 
+  ? `linear-gradient(90deg, ${C.danger}, #FB7185)` 
+  : `linear-gradient(90deg, ${C.success}, #34D399)`;
 
 // ── Confidence Bar ────────────────────────────────────────────────────────────
 const ConfidenceBar = ({ label, confidence, fakeConf, riskLevel, isSuspicious }) => {
@@ -39,37 +41,41 @@ const ConfidenceBar = ({ label, confidence, fakeConf, riskLevel, isSuspicious })
   const C = { ...getColors(theme), theme };
   const s = riskStyle(riskLevel, C);
   return (
-    <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+    <div style={{ display:'flex', flexDirection:'column', gap:8, padding:12, borderRadius:12, background: theme === 'dark' ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.01)' }}>
       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-          <span style={{ fontWeight:700, color: C.textPrimary, fontSize:14 }}>{label}</span>
+        <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+          <span style={{ fontWeight:800, color: C.textPrimary, fontSize:13, textTransform:'uppercase', letterSpacing:'0.5px' }}>{label}</span>
           <span style={{
-            fontSize:11, fontWeight:700, padding:'2px 10px', borderRadius:99,
+            fontSize:10, fontWeight:800, padding:'2px 10px', borderRadius:99,
             background: isSuspicious ? C.dangerBg : C.successBg,
             color: isSuspicious ? C.danger : C.success,
-            border:`1px solid ${isSuspicious ? (theme === 'dark' ? '#991B1B' : '#FECACA') : (theme === 'dark' ? '#065F46' : '#A7F3D0')}`
+            textTransform:'uppercase', letterSpacing:'0.5px',
+            border:`1px solid ${isSuspicious ? (theme === 'dark' ? '#881337' : '#FECDD3') : (theme === 'dark' ? '#064E3B' : '#DCFCE7')}`
           }}>
-            {isSuspicious ? '🔴 More Suspicious' : '🟢 More Authentic'}
+            {isSuspicious ? 'High Risk Artifacts' : 'Clean Signature'}
           </span>
         </div>
-        <span style={{ fontSize:13, fontWeight:700, color: s.color }}>{fakeConf.toFixed(1)}% fake</span>
+        <div style={{ textAlign:'right' }}>
+          <span style={{ fontSize:14, fontWeight:900, color: s.color }}>{fakeConf.toFixed(1)}%</span>
+          <span style={{ fontSize:10, fontWeight:700, color: C.textSec, marginLeft:4, textTransform:'uppercase' }}>Fake Prob.</span>
+        </div>
       </div>
-      <div style={{ height:18, background: theme === 'dark' ? '#334155' : '#F3F4F6', borderRadius:99, overflow:'hidden', position:'relative', border:`1px solid ${C.border}` }}>
+      <div style={{ height:12, background: theme === 'dark' ? '#1E293B' : '#E2E8F0', borderRadius:99, overflow:'hidden', position:'relative' }}>
         <motion.div
           style={{ height:'100%', borderRadius:99, background: barColor(isSuspicious, C) }}
           initial={{ width:0 }}
           animate={{ width:`${Math.min(fakeConf,100)}%` }}
-          transition={{ duration:1, ease:'easeOut', delay:0.2 }}
+          transition={{ duration:1.2, ease:[0.22, 1, 0.36, 1], delay:0.2 }}
         />
-        <span style={{
-          position:'absolute', right:8, top:0, height:'100%',
-          display:'flex', alignItems:'center', fontSize:11, color: theme === 'dark' ? '#F8FAFC' : C.textSec, fontFamily:'monospace'
-        }}>{fakeConf.toFixed(1)}%</span>
       </div>
-      <p style={{ fontSize:12, color: C.textSec }}>
-        Confidence: <strong style={{ color: C.textPrimary }}>{confidence.toFixed(1)}%</strong>
-        {'  ·  '}Risk: <strong style={{ color: s.color }}>{riskLevel}</strong>
-      </p>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <p style={{ fontSize:11, color: C.textSec, margin:0, fontWeight:600 }}>
+          Inference: <span style={{ color: C.textPrimary }}>{confidence.toFixed(1)}%</span>
+        </p>
+        <p style={{ fontSize:11, color: C.textSec, margin:0, fontWeight:600 }}>
+          Status: <span style={{ color: s.color, fontWeight:800 }}>{riskLevel.toUpperCase()}</span>
+        </p>
+      </div>
     </div>
   );
 };
@@ -318,42 +324,45 @@ const Compare = () => {
             
             {/* 1. Hero Summary Card */}
             <div style={{
-              borderRadius:24, border:`1.5px solid ${susp==='A' ? (theme === 'dark' ? '#991B1B' : '#FECACA') : (theme === 'dark' ? '#312E81' : '#A5B4FC')}`,
-              boxShadow:'0 4px 20px rgba(0,0,0,0.08)', overflow:'hidden'
+              borderRadius:24, border:`1px solid ${C.border}`,
+              background: C.card, boxShadow:'0 10px 30px -10px rgba(0,0,0,0.1)', overflow:'hidden'
             }}>
               <div style={{
                 background: susp==='A'
-                  ? (theme === 'dark' ? 'linear-gradient(135deg,#450A0A,#1E293B)' : 'linear-gradient(135deg,#FEF2F2,#FFF)')
-                  : (theme === 'dark' ? 'linear-gradient(135deg,#1E1B4B,#1E293B)' : 'linear-gradient(135deg,#EEF2FF,#FFF)'),
-                padding:'24px 28px'
+                  ? (theme === 'dark' ? 'linear-gradient(135deg, rgba(225,29,72,0.1), transparent)' : 'linear-gradient(135deg, rgba(225,29,72,0.05), transparent)')
+                  : (theme === 'dark' ? 'linear-gradient(135deg, rgba(5,150,105,0.1), transparent)' : 'linear-gradient(135deg, rgba(5,150,105,0.05), transparent)'),
+                padding:'32px'
               }}>
-                <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:20, flexWrap:'wrap' }}>
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:20, flexWrap:'wrap' }}>
                   <div style={{ flex:1 }}>
-                    <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
                       <div style={{
-                        width:30, height:30, borderRadius:8, background: C.accentBg,
+                        width:36, height:36, borderRadius:10, background: C.accentBg,
                         display:'flex', alignItems:'center', justifyContent:'center'
                       }}>
-                        <Scale size={15} style={{ color: C.accent }}/>
+                        <ShieldCheck size={18} style={{ color: C.accent }}/>
                       </div>
-                      <span style={{ fontSize:11, fontWeight:700, color: C.accent, letterSpacing:2, textTransform:'uppercase' }}>
-                        Comparison Result
+                      <span style={{ fontSize:12, fontWeight:800, color: C.accent, letterSpacing:1.5, textTransform:'uppercase' }}>
+                        Forensic Disparity Report
                       </span>
                     </div>
-                    <h2 style={{ margin:'0 0 8px', fontSize:26, fontWeight:900, color: C.textPrimary, lineHeight:1.3 }}>
-                      Image <span style={{ color: C.danger }}>{susp}</span> is{' '}
-                      <span style={{ color: C.danger }}>more likely FAKE</span>{' '}
-                      than Image <span style={{ color: C.success }}>{susp==='A'?'B':'A'}</span>
+                    <h2 style={{ margin:'0 0 12px', fontSize:32, fontWeight:900, color: C.textPrimary, lineHeight:1.1, letterSpacing:'-1px' }}>
+                      Image <span style={{ color: C.accent }}>{susp}</span> shows higher <span style={{ color: C.danger }}>synthetic probability</span>
                     </h2>
-                    <p style={{ margin:0, color: C.textSec, fontSize:14 }}>{result.comparison.summary}</p>
-                  </div>
-                  <div style={{ textAlign:'right', flexShrink:0 }}>
-                    <p style={{ margin:'0 0 2px', fontSize:10, fontWeight:700, color: C.textSec, letterSpacing:1, textTransform:'uppercase' }}>
-                      Confidence Gap
+                    <p style={{ margin:0, color: C.textSec, fontSize:15, lineHeight:1.6, fontWeight:500 }}>
+                      Comparison shows Image {susp} is {result.comparison.confidence_diff.toFixed(1)}% more likely to be AI-generated than Image {susp==='A'?'B':'A'}.
                     </p>
-                    <p style={{ margin:0, fontSize:38, fontWeight:900, color: C.textPrimary, lineHeight:1 }}>
-                      +{result.comparison.confidence_diff.toFixed(1)}
-                      <span style={{ fontSize:18, color: C.textSec }}>%</span>
+                  </div>
+                  <div style={{ 
+                    padding:20, borderRadius:20, background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    textAlign:'center', border:`1px solid ${C.border}`, minWidth:140
+                  }}>
+                    <p style={{ margin:'0 0 4px', fontSize:10, fontWeight:800, color: C.textSec, letterSpacing:1.5, textTransform:'uppercase' }}>
+                      Delta Confidence
+                    </p>
+                    <p style={{ margin:0, fontSize:42, fontWeight:950, color: C.textPrimary, lineHeight:1 }}>
+                      {result.comparison.confidence_diff.toFixed(1)}
+                      <span style={{ fontSize:20, color: C.textSec, fontWeight:700 }}>%</span>
                     </p>
                   </div>
                 </div>

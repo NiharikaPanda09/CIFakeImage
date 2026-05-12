@@ -22,13 +22,13 @@ const stagger = {
 const FeatureCard = ({ icon: Icon, color, title, desc }) => (
   <motion.div
     variants={fadeUp(0)}
-    className="relative bg-white/60 dark:bg-slate-800/60 backdrop-blur-md rounded-2xl p-6 border border-white/30 dark:border-slate-700/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+    className="relative bg-blue-50/50 dark:bg-[#ffffff0a] backdrop-blur-md rounded-2xl p-8 border border-blue-100 dark:border-white/10 shadow-xl hover:bg-white/10 transition-all duration-300"
   >
-    <div className={`w-12 h-12 inline-flex items-center justify-center rounded-xl mb-4 ${color}`}>
-      <Icon size={22} />
+    <div className={`w-12 h-12 inline-flex items-center justify-center rounded-xl mb-6 ${color} shadow-sm`}>
+      <Icon size={24} />
     </div>
-    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{title}</h3>
-    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{desc}</p>
+    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{title}</h3>
+    <p className="text-sm text-slate-600 dark:text-gray-400 leading-relaxed font-medium">{desc}</p>
   </motion.div>
 );
 
@@ -37,16 +37,16 @@ const ActionCard = ({ icon: Icon, label, sub, to, gradient }) => (
   <motion.div variants={fadeUp(0)}>
     <Link
       to={to}
-      className="group flex items-center gap-4 p-5 rounded-2xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-md border border-white/30 dark:border-slate-700/50 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+      className="group flex items-center gap-4 p-6 rounded-2xl bg-white/70 dark:bg-[#ffffff0a] backdrop-blur-md border border-slate-200 dark:border-white/10 shadow-lg hover:shadow-xl hover:translate-x-1 transition-all duration-300"
     >
-      <div className={`w-12 h-12 flex items-center justify-center rounded-xl shrink-0 ${gradient}`}>
-        <Icon size={22} className="text-white" />
+      <div className={`w-14 h-14 flex items-center justify-center rounded-2xl shrink-0 ${gradient} shadow-md`}>
+        <Icon size={24} className="text-white" />
       </div>
       <div>
-        <p className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+        <p className="font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
           {label}
         </p>
-        <p className="text-xs text-gray-500 dark:text-gray-400">{sub}</p>
+        <p className="text-xs text-slate-500 dark:text-gray-400 font-medium">{sub}</p>
       </div>
     </Link>
   </motion.div>
@@ -70,41 +70,38 @@ const GuestHome = () => (
       <div className="pointer-events-none absolute bottom-0 right-0 w-72 h-72 rounded-full bg-cyan-500/10 blur-3xl" />
 
       <motion.div variants={fadeUp(0)} className="relative">
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-semibold tracking-wide uppercase mb-6 border border-blue-200 dark:border-blue-700/50">
-          <Cpu size={13} /> Explainable AI · CNN · Grad-CAM
-        </span>
 
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-gray-900 dark:text-white leading-tight">
+        <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9] mb-8">
           CIFAKE
-          <span className="block bg-gradient-to-r from-blue-600 via-indigo-500 to-violet-500 bg-clip-text text-transparent mt-1">
-            Synthetic Image Detection
+          <span className="block bg-gradient-to-r from-blue-600 via-indigo-500 to-violet-500 bg-clip-text text-transparent mt-2">
+            IMAGE ANALYSIS
           </span>
         </h1>
 
-        <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-          An industry-grade tool that tells you whether an image is <strong className="text-gray-900 dark:text-white">real or AI-generated</strong> — and
-          <em> shows you exactly why</em> using Gradient Class Activation Maps.
+        <p className="mt-6 max-w-2xl mx-auto text-lg text-slate-600 dark:text-gray-400 leading-relaxed font-medium">
+          An industry-grade tool that tells you whether an image is <strong className="text-slate-900 dark:text-white">real or AI-generated</strong> — and
+          <em className="text-slate-500 dark:text-gray-300"> shows you exactly why</em> using Gradient Class Activation Maps.
         </p>
 
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="mt-12 flex flex-col sm:flex-row gap-6 justify-center">
           <Link
             to="/login"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-base shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+            className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-base hover:bg-slate-800 dark:hover:bg-gray-100 hover:scale-[1.05] active:scale-[0.98] transition-all duration-300 shadow-xl shadow-slate-900/10 dark:shadow-white/10"
           >
-            <Zap size={18} /> Get Started — Sign In
+            <Zap size={18} /> Get Started
           </Link>
           <Link
             to="/register"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white/70 dark:bg-slate-800/70 backdrop-blur-md border border-gray-200 dark:border-slate-700 text-gray-800 dark:text-white font-bold text-base hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+            className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-transparent border border-slate-300 dark:border-white/30 text-slate-900 dark:text-white font-bold text-base hover:bg-slate-900/5 dark:hover:bg-white/10 hover:border-slate-900 dark:hover:border-white hover:scale-[1.05] active:scale-[0.98] transition-all duration-300 backdrop-blur-md"
           >
-            <Lock size={16} /> Create Free Account
+            <Lock size={16} /> Create Account
           </Link>
         </div>
       </motion.div>
     </section>
 
     {/* Stats strip */}
-    <motion.section variants={fadeUp(0.1)} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+    <motion.section variants={fadeUp(0.1)} className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
       {[
         { val: '97.4%', label: 'Model Accuracy' },
         { val: '2 Classes', label: 'Real vs Fake' },
@@ -113,12 +110,12 @@ const GuestHome = () => (
       ].map(({ val, label }) => (
         <div
           key={label}
-          className="text-center py-6 px-4 rounded-2xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-md border border-white/30 dark:border-slate-700/50 shadow"
+          className="text-center py-8 px-4 rounded-3xl bg-white/70 dark:bg-[#ffffff0a] backdrop-blur-md border border-slate-200 dark:border-white/10 shadow-xl"
         >
-          <p className="text-2xl font-black bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
+          <p className="text-3xl font-black bg-gradient-to-r from-blue-600 to-indigo-500 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent">
             {val}
           </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">{label}</p>
+          <p className="text-xs text-slate-500 dark:text-white/60 mt-2 font-bold uppercase tracking-widest">{label}</p>
         </div>
       ))}
     </motion.section>
@@ -146,12 +143,12 @@ const GuestHome = () => (
     </motion.section>
 
     {/* Warning banner */}
-    <motion.div variants={fadeUp(0.2)} className="mb-20 bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-400 p-6 rounded-r-2xl shadow-sm">
-      <div className="flex gap-4">
-        <ShieldAlert className="h-6 w-6 text-amber-500 shrink-0 mt-0.5" />
+    <motion.div variants={fadeUp(0.2)} className="mb-20 bg-amber-50 dark:bg-amber-900/20 backdrop-blur-md border-l-4 border-amber-500 p-8 rounded-r-2xl shadow-xl border-y border-r border-amber-200/30 dark:border-none">
+      <div className="flex gap-6">
+        <ShieldAlert className="h-8 w-8 text-amber-600 dark:text-amber-400 shrink-0 mt-1" />
         <div>
-          <h3 className="text-base font-bold text-amber-800 dark:text-amber-300">Model Limitations &amp; Constraints</h3>
-          <p className="mt-1 text-sm text-amber-700 dark:text-amber-200/80 leading-relaxed">
+          <h3 className="text-lg font-bold text-amber-900 dark:text-amber-400">Model Limitations &amp; Constraints</h3>
+          <p className="mt-2 text-sm text-amber-800 dark:text-amber-200/80 leading-relaxed font-medium">
             The model was trained on 32×32 pixel images. High-resolution uploads are downscaled before classification.
             Fine-grained artifacts from newer generators (Midjourney v6, DALL-E 3) may be lost in the downscaling process,
             potentially affecting real-world accuracy outside the training distribution.
@@ -184,16 +181,19 @@ const UserHome = ({ username }) => (
             <User size={28} className="text-white" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-1">
+            <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-1">
               Welcome back
             </p>
-            <h1 className="text-4xl sm:text-5xl font-black text-gray-900 dark:text-white leading-tight">
-              Hello, <span className="bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent">{username}</span> 👋
+            <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight">
+              Hello, <span className="bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent tracking-tight">{username}</span>
             </h1>
+            <p className="text-xs font-mono text-gray-400 dark:text-slate-500 mt-1">
+              Operator Status: Verified · System Active
+            </p>
           </div>
         </div>
 
-        <p className="max-w-2xl text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-10">
+        <p className="max-w-2xl text-lg text-gray-400 leading-relaxed mb-10">
           Your personal AI image forensics dashboard is ready. Upload an image, explore past results, or dive into your analytics below.
         </p>
 
@@ -243,12 +243,12 @@ const UserHome = ({ username }) => (
     </motion.section>
 
     {/* Warning banner */}
-    <motion.div variants={fadeUp(0.15)} className="mb-20 bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-400 p-6 rounded-r-2xl shadow-sm">
-      <div className="flex gap-4">
-        <ShieldAlert className="h-6 w-6 text-amber-500 shrink-0 mt-0.5" />
+    <motion.div variants={fadeUp(0.15)} className="mb-20 bg-amber-50 dark:bg-amber-900/20 backdrop-blur-md border-l-4 border-amber-500 p-8 rounded-r-2xl shadow-xl border-y border-r border-amber-200/30 dark:border-none">
+      <div className="flex gap-6">
+        <ShieldAlert className="h-8 w-8 text-amber-600 dark:text-amber-400 shrink-0 mt-1" />
         <div>
-          <h3 className="text-base font-bold text-amber-800 dark:text-amber-300">Model Limitations &amp; Constraints</h3>
-          <p className="mt-1 text-sm text-amber-700 dark:text-amber-200/80 leading-relaxed">
+          <h3 className="text-lg font-bold text-amber-900 dark:text-amber-400">Model Limitations &amp; Constraints</h3>
+          <p className="mt-2 text-sm text-amber-800 dark:text-amber-200/80 leading-relaxed font-medium">
             The model was trained on 32×32 pixel images. High-resolution uploads are downscaled before classification.
             Fine-grained artifacts from newer generators (Midjourney v6, DALL-E 3) may be lost in the downscaling process.
           </p>
